@@ -2,32 +2,34 @@
 
 ## Setup Instructions
 
-### 1. Install dependencies
+### 1. Clone the repo 
+```bash
+git clone https://github.com/Anya-Gill/CS498Project.git
+cd CS498Project
+```
+
+### 2. Install dependencies
 
 ```bash
+sudo apt update
+sudo apt install python3-pip python3-venv git -y
+```
+
+### 3. Set up a virtual environment 
+```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
-### 2. Configure Env Vars
+
+### 4. Create your .env file with your Mongo URI
 Create a .env file in the root directory and add the mongoDB connection string:
 
 ```bash
 MONGO_URI="mongodb+srv://<db_username>:<db_password>@cluster0.xyjlce2.mongodb.net/?appName=Cluster0"
 ```
 
-### 3. Download data from Kaggle
-1. Download Eurovision 10.json from https://www.kaggle.com/datasets/patrickjoan/twitter-data-from-2018-eurovision-final/data?select=Eurovision10.json
-
-2. Create a /data folder in the project root and place downloaded file into that folder.
-
-### 4. Usage 
-
-To load a single dataset:
-
+### 5. Run the server
 ```bash
-python load_tweets.py data/Eurovision10.json
-```
-To check data added:
-
-```bash
-python check_db.py
+python app.py
 ```
