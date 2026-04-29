@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flask Interface</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Flask Interface</h1>
+    <p>localhost:5000</p>
+  </header>
+
+  <div class="button-bar">
+    <button class="btn" onclick="callEndpoint('one')">Top 10 Retweeted Tweets</button>
+    <button class="btn" onclick="callEndpoint('two')">Endpoint Two</button>
+  </div>
+
+  <div id="status-bar" class="status-bar">Ready.</div>
+
+  <div id="response-area" class="response-area"></div>
+
+  <!-- Ping: fixed bottom-right -->
+  <button class="ping-btn" onclick="callEndpoint('ping')">ping</button>
+
+  <script src="main.js"></script>
+</body>
+</html>
