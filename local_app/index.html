@@ -18,6 +18,16 @@
     <button class="btn" onclick="callEndpoint('two')">Most Active Users</button>
   </div>
 
+<div class="button-bar">
+  <input type="text" id="hashtagInput" placeholder="Enter hashtag" />
+  <button class="btn" onclick="searchByHashtag()">Search Hashtag</button>
+</div>
+
+<div class="button-bar">
+  <input type="text" id="tweetIdInput" placeholder="Enter Tweet ID" />
+  <button class="btn" onclick="getReplies()">Get Replies</button>
+</div>
+
   <div id="status-bar" class="status-bar">Ready.</div>
 
   <div id="response-area" class="response-area"></div>

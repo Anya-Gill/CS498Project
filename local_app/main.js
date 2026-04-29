@@ -15,14 +15,13 @@ function setLoading(message = "Fetching...") {
 
 /**
  * Renders a single tweet object as a card.
- * Works for both endpoint-one items and the ping sample tweet.
  */
 function renderTweetCard(tweet) {
   const screenName   = tweet.user?.screen_name ?? "—";
-  const createdAt    = tweet.created_at         ?? "—";
-  const text         = tweet.text               ?? "—";
-  const retweetCount = tweet.retweet_count       ?? "—";
-  const idStr        = tweet.id_str              ?? "—";
+  const createdAt    = tweet.created_at ?? "—";
+  const text         = tweet.text ?? "—";
+  const retweetCount = tweet.retweet_count ?? "—";
+  const idStr        = tweet.id_str ?? "—";
 
   const card = document.createElement("div");
   card.className = "tweet-card";
@@ -47,7 +46,7 @@ function renderTweetCard(tweet) {
 }
 
 /**
- * Renders a list of tweet cards (endpoint-one).
+ * Endpoint 1 renderer
  */
 function renderEndpointOne(data) {
   const tweets = data.data ?? [];
@@ -55,29 +54,109 @@ function renderEndpointOne(data) {
     responseArea.innerHTML = `<p class="state-message">No results returned.</p>`;
     return;
   }
+
   tweets.forEach(tweet => {
     responseArea.appendChild(renderTweetCard(tweet));
   });
-  setStatus(`Showing ${tweets.length} result(s) — query: ${data.query ?? ""}`, "ok");
+
+  setStatus(`Showing ${tweets.length} result(s)`, "ok");
 }
 
 /**
- * Renders endpoint-two as raw JSON until its shape is known.
- * Update this function once the response structure is confirmed.
+ * Endpoint 2 renderer (raw JSON)
  */
 function renderEndpointTwo(data) {
   const pre = document.createElement("pre");
   pre.className = "raw-json";
   pre.textContent = JSON.stringify(data, null, 2);
   responseArea.appendChild(pre);
-  setStatus("Raw response from endpoint two.", "");
+  setStatus("Raw response from endpoint two.");
 }
 
 /**
- * Renders the ping response: a status row + one sample tweet card.
+ * ✅ Query 2: Hashtag Search
+ */
+function searchByHashtag() {
+  const hashtag = document.getElementById("hashtagInput").value;
+
+  setLoading("Searching tweets by hashtag...");
+
+  fetch(`${BASE_URL}/tweets-by-hashtag?hashtag=${hashtag}`)
+    .then(res => res.json())
+    .then(data => {
+      responseArea.innerHTML = "";
+
+      if (!data.length) {
+        responseArea.innerHTML = `<p class="state-message">No results found.</p>`;
+        return;
+      }
+
+      data.forEach(tweet => {
+        responseArea.appendChild(renderTweetCard(tweet));
+      });
+
+      setStatus(`Found ${data.length} tweets for #${hashtag}`, "ok");
+    });
+}
+
+/**
+ * ✅ Query 4: Replies
+ */
+function getReplies() {
+  const tweetId = document.getElementById("tweetIdInput").value;
+
+  setLoading("Fetching replies...");
+
+  fetch(`${BASE_URL}/replies-to-tweet?tweet_id=${tweetId}`)
+    .then(res => res.json())
+    .then(data => {
+      responseArea.innerHTML = "";
+
+      if (!data.length) {
+        responseArea.innerHTML = `<p class="state-message">No replies found.</p>`;
+        return;
+      }
+
+      data.forEach(tweet => {
+        responseArea.appendChild(renderTweetCard(tweet));
+      });
+
+      setStatus(`Found ${data.length} replies`, "ok");
+    });
+}
+
+/**
+ * ✅ OPTIONAL: Show sample hashtags (helps demo)
+ */
+function getHashtags() {
+  setLoading("Fetching hashtags...");
+
+  fetch(`${BASE_URL}/sample-hashtags`)
+    .then(res => res.json())
+    .then(data => {
+      responseArea.innerHTML = "";
+
+      if (!data.length) {
+        responseArea.innerHTML = `<p class="state-message">No hashtags found.</p>`;
+        return;
+      }
+
+      data.forEach(tag => {
+        const el = document.createElement("div");
+        el.className = "tweet-card";
+        el.textContent = `#${tag}`;
+        responseArea.appendChild(el);
+      });
+
+      setStatus(`Showing ${data.length} hashtags`, "ok");
+    });
+}
+
+/**
+ * Ping renderer
  */
 function renderPing(data) {
-  const status = data.status       ?? "unknown";
+  const status = data.status ?? "unknown";
   const tweet  = data.sample_tweet ?? null;
   const isOk   = status === "ok";
 
@@ -103,7 +182,6 @@ function renderPing(data) {
   responseArea.appendChild(card);
   setStatus(`Ping returned: ${status}`, isOk ? "ok" : "error");
 }
-
 
 async function callEndpoint(which) {
   const endpointMap = {
