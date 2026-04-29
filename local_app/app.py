@@ -33,7 +33,7 @@ def endpoint_two():
     Replace ADD_ENDPOINT_TWO with the actual endpoint path on the VM server.
     """
     try:
-        response = requests.get(f"{VM_BASE_URL}/ADD_ENDPOINT_TWO")
+        response = requests.get(f"{VM_BASE_URL}/most-active-users")
         response.raise_for_status()
         return jsonify(response.json()), response.status_code
     except requests.exceptions.ConnectionError:

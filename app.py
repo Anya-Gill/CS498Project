@@ -60,6 +60,39 @@ def top_retweeted():
     results = list(col.aggregate(pipeline))
     return jsonify({"query": "top_retweeted", "count": len(results), "data": serialize(results)})
 
+#--Query 2 - Most active users
+@app.route("/most-active-users", methods=["GET"])
+def most_active_users():
+    pipeline = [
+        {
+            "$group": {
+                "_id": "$user.id_str",
+                "screen_name": {"$first": "$user.screen_name"},
+                "tweet_count": {"$sum": 1}
+            }
+        },
+        {
+            "$sort": {"tweet_count": -1}
+        },
+        {
+            "$limit": 10
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "user_id": "$_id",
+                "screen_name": 1,
+                "tweet_count": 1
+            }
+        }
+    ]
+
+    results = list(col.aggregate(pipeline))
+    return jsonify({
+        "query": "most_active_users",
+        "count": len(results),
+        "data": serialize(results)
+    })
 
 # ── Run ────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
