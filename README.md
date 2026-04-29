@@ -38,7 +38,7 @@ python app.py
 ```bash
 git clone https://github.com/Anya-Gill/CS498Project.git
 cd CS498Project
-cd local
+cd local_app
 ```
 
 #### 2. Install dependencies
