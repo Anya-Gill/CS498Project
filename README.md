@@ -43,6 +43,12 @@ cd local
 
 #### 2. Install dependencies
 ```bash
+sudo apt update
+sudo apt install python3-pip python3-venv git -y
+```
+
+#### 3. Setup environment
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install flask flask-cors requests
