@@ -83,9 +83,9 @@ def most_active_users():
 
 
 # ── Query 3 – Tweets by hashtag ───────────────────────────────────────────────
-@app.route("/tweets-by-hashtag")
-def tweets_by_hashtag():
-    hashtag = request.args.get("hashtag")
+@app.route("/tweets-by-hashtag/<hashtag>")
+def tweets_by_hashtag(hashtag):
+    # hashtag = request.args.get("hashtag")
 
     results = list(col.find(
         {"entities.hashtags.text": hashtag},
