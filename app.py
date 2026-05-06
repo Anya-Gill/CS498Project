@@ -108,7 +108,7 @@ def replies_to_tweet():
     tweet_id = request.args.get("tweet_id")
 
     results = list(col.find(
-        {"in_reply_to_status_id_str": tweet_id},
+        {"id_str": tweet_id},
         {
             "_id": 0,
             "text": 1,
